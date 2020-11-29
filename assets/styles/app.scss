@@ -1,0 +1,14 @@
+@import "~bootstrap/scss/bootstrap";
+
+$main-color: #33691E;
+$second-color: #18310C;
+$dark: #081004;
+$light: #F3FBEF;
+
+body {
+    background-color: $dark;
+}
+
+h1 {
+    color: $main-color;
+}

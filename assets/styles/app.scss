@@ -9,6 +9,10 @@ body {
     background-color: $dark;
 }
 
-h1 {
+h1, h2, h3 {
     color: $main-color;
+}
+
+p {
+    color: $light;
 }

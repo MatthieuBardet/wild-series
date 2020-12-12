@@ -6,10 +6,13 @@
 
     <h1 class="mt-0">{{ program.title }} - Saison {{ season.number }} ({{ season.year }})</h1>
     <h2>Liste des épisodes :</h2>
-    {% for episode in episodes %}
-        <p>{{ episode.number }}. {{ episode.title }}</p>
-        <p>{{ episode.synopsis }}</p>
-    {% endfor %}
+    <ul>
+        {% for episode in season.episodes %}
+            <li>
+                <a href="{{ path('program_episode_show',{program: program.id, season: season.id, episode: episode.id}) }}">{{ episode.number }}. {{ episode.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
     <a href="{{ path('program_index') }}">
         Retour à la liste des programmes
     </a>

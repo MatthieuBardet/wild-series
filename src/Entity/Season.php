@@ -46,7 +46,6 @@ class Season
 
     public function __construct()
     {
-        $this->program_id = new ArrayCollection();
         $this->episodes = new ArrayCollection();
     }
 
@@ -58,7 +57,7 @@ class Season
     /**
      * @return Collection|Program[]
      */
-    public function getProgramId(): Collection
+    public function getProgramId()
     {
         return $this->program_id;
     }

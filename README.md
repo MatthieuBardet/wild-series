@@ -12,4 +12,6 @@ Lien vers la vidéo du challenge 13 : https://i.imgur.com/dX0uhRt.mp4
 
 Lien vers la vidéo du challenge 14 : https://i.imgur.com/rxJbQq9.mp4
 
-Lien vers la vidé odu challenge 15 : https://i.imgur.com/cn4vGCN.mp4
+Lien vers la vidéo du challenge 15 : https://i.imgur.com/cn4vGCN.mp4
+
+Lien vers la vidéo du challenge 16 : https://i.imgur.com/KRDqcaP.mp4

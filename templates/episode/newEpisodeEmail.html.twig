@@ -1,0 +1,9 @@
+{% extends 'layoutEmail.html.twig' %}
+
+{% block title %}Un nouvel episode vient d'etre ajouté !{% endblock %}
+
+{% block content %}
+    <h1>L'épisode {{ episode.number }} - {{ episode.title }} vient d'être ajoutée pour la série {{ episode.seasonId.programiD.title }} !</h1>
+    <p>Résumé : {{ episode.synopsis }}</p>
+    <a href="http://127.0.0.1:8000/programs/{{ episode.seasonId.programId.slug }}/seasons/{{ episode.seasoniD.id }}/episode/{{ episode.slug }}">Retrouve l'épisode sur Wild Series !</a>
+{% endblock %}

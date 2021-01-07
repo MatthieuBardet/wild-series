@@ -1,8 +1,8 @@
 <?php
 
-
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Episode;
 use App\Entity\Season;
 use App\Form\ProgramType;
@@ -16,11 +16,11 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Entity\Program;
+use App\Form\CommentType;
 
 /**
  * @Route("/programs", name="program_")
  */
-
 class ProgramController extends AbstractController
 {
     /**
@@ -46,7 +46,7 @@ class ProgramController extends AbstractController
      * @return Response
      * @throws TransportExceptionInterface
      */
-    public function new(Request $request, Slugify $slugify, MailerInterface $mailer) : Response
+    public function new(Request $request, Slugify $slugify, MailerInterface $mailer): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
@@ -83,7 +83,7 @@ class ProgramController extends AbstractController
     {
         if (!$program) {
             throw $this->createNotFoundException(
-                'No program with id : '.$program.' found in program\'s table.'
+                'No program with id : ' . $program . ' found in program\'s table.'
             );
         }
 
@@ -114,15 +114,34 @@ class ProgramController extends AbstractController
      * @param Program $program
      * @param Season $season
      * @param Episode $episode
+     * @param Request $request
      * @return Response
      */
 
-    public function showEpisode(Program $program, Season $season, Episode $episode): Response
+    public function showEpisode(Program $program, Season $season, Episode $episode, Request $request): Response
     {
+        $comments = new Comment();
+        $form = $this->CreateForm(CommentType::class, $comments);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comments->setUser($this->getUser());
+            $comments->setEpisode($episode);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comments);
+            $entityManager->flush();
+            return $this->redirectToRoute('program_episode_show', [
+                'program' => $program->getSlug(),
+                'season' => $season->getId(),
+                'episode' => $episode->getSlug(),
+            ]);
+        }
+
         return $this->render("programs/episode_show.html.twig", [
             'program' => $program,
             'season' => $season,
-            'episode' => $episode
+            'episode' => $episode,
+            'form' => $form->createView(),
         ]);
     }
 }

@@ -80,6 +80,8 @@ class ProgramController extends AbstractController
 
             $mailer->send($email);
 
+            $this->addFlash('success', 'Le programme a bien été ajouté !');
+
             return $this->redirectToRoute('program_index');
         }
         return $this->render('programs/new.html.twig', [
@@ -126,6 +128,8 @@ class ProgramController extends AbstractController
             $program->setSlug($slugify->generate($program->getTitle()));
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'Le programme a bien été modifié !');
+
             return $this->redirectToRoute('program_index');
         }
 
@@ -133,6 +137,25 @@ class ProgramController extends AbstractController
             'program' => $program,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Program $program
+     * @return Response
+     */
+    public function delete(Request $request, Program $program): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$program->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($program);
+            $entityManager->flush();
+
+            $this->addFlash('danger', 'Le programme a été supprimé !');
+        }
+
+        return $this->redirectToRoute('program_index');
     }
 
     /**

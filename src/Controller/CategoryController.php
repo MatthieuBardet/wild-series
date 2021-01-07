@@ -55,6 +55,8 @@ class CategoryController extends AbstractController
             $entityManager->persist($category);
             // Flush the persisted object
             $entityManager->flush();
+
+            $this->addFlash('success', 'La nouvelle catégorie a bien été ajoutée !');
             // Finally redirect to categories list
             return $this->redirectToRoute('category_index');
         }

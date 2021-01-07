@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Wild Series{% endblock %}</title>
-    <link rel="icon" href="/images/favicon.png" />
+    <link rel="icon" href="/images/favicon.png"/>
     <link rel="stylesheet" href="/build/app.css">
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
@@ -11,7 +11,14 @@
 </head>
 <body>
 {% block header %}
-{% include 'includes/_navbar.html.twig' %}
+    {% include 'includes/_navbar.html.twig' %}
+    {% for category, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 {% endblock %}
 {% block body %}{% endblock %}
 <script src="/build/app.js"></script>

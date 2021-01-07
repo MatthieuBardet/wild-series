@@ -2,6 +2,6 @@
     <form method="post" action="{{ path('program_comment_delete', { program: program.id , season: season.id, episode: episode.id, comment: comment.id}) }}">
         <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
-        <button class="btn btn-secondary">Supprimer le commentaire</button>
+        <button>Supprimer le commentaire</button>
     </form>
 {% endif %}

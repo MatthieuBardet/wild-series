@@ -25,3 +25,5 @@ Lien vers la vidéo du challenge 19 : https://drive.google.com/file/d/1-53PNiofl
 Lien vers la vidéo du challenge 20 : https://drive.google.com/file/d/1mjvOS-KNUB9PUft-sm9TbvEmFVn2Oxo2/view?usp=sharing
 
 Lien vers la vidéo du challenge 21 : https://i.imgur.com/acspPIt.mp4
+
+Lien vers la vidéo du challenge 22 : https://i.imgur.com/OI17evB.mp4

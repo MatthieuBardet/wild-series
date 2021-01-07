@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Entity\Program;
 use App\Form\CommentType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/programs", name="program_")
@@ -54,6 +55,7 @@ class ProgramController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $program->setSlug($slugify->generate($program->getTitle()));
             $entityManager = $this->getDoctrine()->getManager();
+            $program->setOwner($this->getUser());
             $entityManager->persist($program);
             $entityManager->flush();
 
@@ -88,6 +90,36 @@ class ProgramController extends AbstractController
         }
 
         return $this->render("programs/show.html.twig", ['program' => $program]);
+    }
+
+    /**
+     * @Route("/{slug}/edit", name="edit", methods={"GET","POST"})
+     * @param Slugify $slugify
+     * @param Program $program
+     * @param Request $request
+     * @return Response
+     */
+    public function edit(Slugify $slugify, Program $program, Request $request): Response
+    {
+        // Check wether the logged in user is the owner of the program
+        if (!($this->getUser() == $program->getOwner())) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw new AccessDeniedException('Only the owner can edit the program!');
+        }
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $program->setSlug($slugify->generate($program->getTitle()));
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('program_index');
+        }
+
+        return $this->render('programs/edit.html.twig', [
+            'program' => $program,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -144,4 +176,30 @@ class ProgramController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/{program}/seasons/{season}/episode/{episode}/comment/{comment<^[0-9]+$>}",
+     *     methods={"DELETE"}, name="comment_delete")
+     * @param Request $request
+     * @param Comment $comment
+     * @param Program $program
+     * @param Season $season
+     * @param Episode $episode
+     * @return Response
+     */
+
+        public function deleteComment(Request $request, Comment $comment,  Program $program, Season $season, Episode $episode): Response
+        {
+            if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($comment);
+                $entityManager->flush();
+            }
+
+            return $this->redirectToRoute('program_episode_show', [
+                'program' => $program->getSlug(),
+                'season' => $season->getId(),
+                'episode' => $episode->getSlug()
+            ]);
+        }
 }

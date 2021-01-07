@@ -15,19 +15,23 @@
                 <p>Auteur : {{ comment.user.email }}</p>
                 <p>Note : {{ comment.rate }}</p>
                 <p>Commentaire : {{ comment.comment }}</p>
-            </li><br>
+            </li>
+            <br>
+            {% if is_granted("ROLE_ADMIN") or app.user == comment.user %}
+                {{ include('programs/_delete_comment.html.twig') }}
+            {% endif %}
         {% else %}
             <p>Aucun commentaire n'a été rédigé pour cet épisode.</p>
         {% endfor %}
     </ul>
     {% if app.user %}
-    <div>
-        <p>Commentaires</p>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type='submit' value='Publier mon commentaire'>
-        {{ form_end(form) }}
-    </div>
+        <div>
+            <p>Commentaires</p>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input type='submit' value='Publier mon commentaire'>
+            {{ form_end(form) }}
+        </div>
     {% endif %}
     <a href="{{ path('program_index') }}">
         Retour à la liste des programmes

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\CategoryType;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class CategoryController
@@ -34,7 +35,7 @@ class CategoryController extends AbstractController
     /**
      * The controller for the category add form
      * Display the form or deal with it
-     *
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/new", name="new")
      */
     public function new(Request $request): Response
